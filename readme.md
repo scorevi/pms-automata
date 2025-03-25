@@ -2,10 +2,7 @@ Final project for Automata Theory and Formal Languages @ CIIT Philippines, Year 
 
 Developed by:
 
-Sean Patrick Caintic
-
-Kirk Mae Besa
-
-Zari Datuin
-
-Jupiter Lagmay
+	Erika Mae Caintic
+	Kirk Mae Besa
+	Zari Datuin
+	Jupiter Lagmay
