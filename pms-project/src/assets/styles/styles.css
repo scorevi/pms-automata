@@ -1,0 +1,28 @@
+.user-view-container {
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+  }
+.side-bar-container {
+    box-sizing: border-box;
+    height: 100%;
+    border-right: 1px solid #A0A7AF;
+    padding: 1em;
+}
+.nav {
+    gap: 1em;
+}
+.nav a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+    text-decoration: none;
+    color: #A0A7AF;
+    padding: 1em 2em;
+    border-radius: 1em;
+}
+.user-view-container .router-link-active {
+    background-color: var(--secondary-color);
+    color: var(--primary-color) !important;
+}
