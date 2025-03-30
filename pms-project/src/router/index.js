@@ -3,6 +3,8 @@ import Login from '@/components/auth/Login.vue'
 import Register from '@/components/auth/Register.vue'
 import DoctorView from '@/views/DoctorView.vue'
 import PatientView from '@/views/PatientView.vue'
+import doctor_routes from './doctor_routes'
+import patient_routes from './patient_routes'
 
 const routes = [
   {
@@ -16,15 +18,18 @@ const routes = [
     component: Register
   },
   {
-    path: '/doctor',
-    name: 'doctor',
-    component: DoctorView
+    path: '/DoctorView',
+    name: 'DoctorView',
+    component: DoctorView,
+    children: doctor_routes
   },
   {
-    path: '/patient',
-    name: 'patient',
-    component: PatientView
-  }
+    path: '/PatientView',
+    name: 'PatientView',
+    component: PatientView,
+    children: patient_routes
+  },
+  doctor_routes
 ]
 
 const router = createRouter({
