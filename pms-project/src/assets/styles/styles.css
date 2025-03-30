@@ -26,3 +26,7 @@
     background-color: var(--secondary-color);
     color: var(--primary-color) !important;
 }
+
+.content-container {
+    padding: 50px;
+}

@@ -7,8 +7,7 @@
         <router-link to="/PatientView/ViewAppointments"><span class="material-symbols-outlined">calendar_month</span>View My Appointments</router-link>
       </nav>
     </div>
-    <div>
-      <!-- Child components will be injected here -->
+    <div class="content-container">
       <router-view />
     </div>
   </div>
