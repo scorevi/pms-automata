@@ -26,4 +26,8 @@ export default {
 form {
     gap: 1em;
 }
+
+form input {
+    width: 300px;
+}
 </style>
