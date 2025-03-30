@@ -1,9 +1,9 @@
-.flex-vertical {
+.flex-column {
     display: flex;
-    flex-direction: vertical;
+    flex-direction: column;
 }
 
-.flex-horizontal {
+.flex-row {
     display: flex;
-    flex-direction: horizontal;
+    flex-direction: row;
 }
