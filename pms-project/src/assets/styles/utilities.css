@@ -1,0 +1,9 @@
+.flex-vertical {
+    display: flex;
+    flex-direction: vertical;
+}
+
+.flex-horizontal {
+    display: flex;
+    flex-direction: horizontal;
+}

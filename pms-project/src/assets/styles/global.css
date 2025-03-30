@@ -1,0 +1,48 @@
+:root {
+    --primary-color: #7082EC;
+    --primary-color-hover: #4860ec;
+    --secondary-color: #7082EC20;
+    --font-size-base: 16px;
+    --spacing-base: 8px;
+}
+
+body, h1, h2, h3, p, ul, ol {
+    margin: 0px;
+    padding: 0px;
+    font-family:'Inter', Arial, sans-serif;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+button {
+    all: unset;
+    background-color: var(--primary-color);
+    font-style: bold;
+    color: #FFFFFF;
+    padding: 1em 2em;
+    border: none;
+    border-radius: 1em;
+}
+button:hover {
+    background-color: var(--primary-color-hover);
+}
+
+input {
+    all: unset;
+    background-color: #F6F8FA;
+    color: #56555D;
+    padding: 1em 2em;
+    border: none;
+    border-radius: 1em;
+}
+
+
+
+
+
