@@ -34,7 +34,7 @@ button:hover {
     background-color: var(--primary-color-hover);
 }
 
-input {
+input, select, option {
     all: unset;
     background-color: #F6F8FA;
     color: #56555D;

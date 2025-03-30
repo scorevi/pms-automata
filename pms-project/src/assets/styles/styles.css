@@ -30,3 +30,7 @@
 .content-container {
     padding: 50px;
 }
+
+.content-container h1 {
+    margin-bottom: 50px;
+}
