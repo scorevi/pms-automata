@@ -4,7 +4,7 @@ import BookAppointment from '@/views/Patient/BookAppointment.vue';
 
 const patient_routes = [
   {
-    path: '',
+    path: 'PatientDashboard',
     name: 'PatientDashboard',
     component: Dashboard,
   },

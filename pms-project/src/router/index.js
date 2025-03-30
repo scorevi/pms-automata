@@ -21,12 +21,14 @@ const routes = [
     path: '/DoctorView',
     name: 'DoctorView',
     component: DoctorView,
+    redirect: '/DoctorView/DoctorDashboard',
     children: doctor_routes
   },
   {
     path: '/PatientView',
     name: 'PatientView',
     component: PatientView,
+    redirect: '/PatientView/PatientDashboard',
     children: patient_routes
   },
   doctor_routes
