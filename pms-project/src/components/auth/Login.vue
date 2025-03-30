@@ -23,11 +23,11 @@ export default {
     methods: {
         handleLogin() {
             // After Login Success
-            this.$router.push('/doctor')
+            this.$router.push('/DoctorView')
         },
         handleLogin2() {
             // After Login Success
-            this.$router.push('/patient')
+            this.$router.push('/PatientView')
         },
         navigateRegister() {
             this.$router.push('/register')
