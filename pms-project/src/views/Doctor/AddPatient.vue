@@ -1,5 +1,5 @@
 <template>
-    <h1>Add New Patient</h1>
+    <h1 class="colored-text">Add New Patient</h1>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <h1>View My Patients</h1>
+  <h1 class="colored-text">View My Patients</h1>
 </template>
 
 <script>
@@ -9,5 +9,6 @@ export default {
 </script>
 
 <style>
+
 
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Book Appointment</h1>
+    <h1 class="colored-text">Book Appointment</h1>
   </div>
 </template>
 
