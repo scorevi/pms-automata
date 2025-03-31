@@ -320,6 +320,10 @@ button:disabled {
   color: green;
 }
 
+label {
+    color: var(--primary-color);
+}
+
 .status-label {
   text-align: center;
   font-style: italic;

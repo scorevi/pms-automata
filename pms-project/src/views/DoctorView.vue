@@ -19,7 +19,7 @@
           <span class="material-symbols-outlined">logout</span>Log Out
         </a>
         <!-- Doctor's license number label -->
-        <div v-if="doctorLicenseNumber">
+        <div id="doctorLicenseNumber" v-if="doctorLicenseNumber">
           <span>License No. {{ doctorLicenseNumber }}</span>
         </div>
       </nav>
@@ -59,3 +59,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#doctorLicenseNumber {
+  color: #A0A7AF;
+  text-align: center;
+  margin-top: auto;
+  padding: 1em 2em;
+}
+</style>
