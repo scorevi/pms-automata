@@ -7,8 +7,11 @@
         <label for="doctor">Doctor:</label>
         <select id="doctor" v-model="form.doctorId" @focus="onFocus" required>
           <option value="" disabled>Select a Doctor</option>
-          <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">
-            {{ doctor.username }} ({{ doctor.specialty || 'General' }})
+          <option 
+            v-for="doctor in doctors" 
+            :key="doctor.id" 
+            :value="doctor.id">
+            {{ formatDoctorDisplay(doctor) }}
           </option>
         </select>
       </div>
@@ -45,6 +48,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'
 import { db, auth } from '../../firebase' // Adjust path as needed
+import { onAuthStateChanged } from 'firebase/auth'
 
 // Automata states
 const states = {
@@ -60,7 +64,7 @@ const state = ref(states.IDLE)
 const errorMessage = ref('')
 const successMessage = ref('')
 
-// Reactive form data for booking appointment.
+// Reactive form data for booking an appointment.
 const form = reactive({
   doctorId: '',
   appointmentDate: '',
@@ -89,6 +93,20 @@ const fetchDoctors = async () => {
 onMounted(() => {
   fetchDoctors()
 })
+
+// Helper: Format doctor's display string. If fullName is not stored, convert username to title case.
+const toTitleCase = (str) => {
+  return str.replace(/\w\S*/g, (txt) => {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  })
+}
+
+const formatDoctorDisplay = (doctor) => {
+  // If doctor has a fullName property, use it; otherwise, use username in title case.
+  if (doctor.fullName && doctor.fullName.trim() !== '') return doctor.fullName
+  if (doctor.username && doctor.username.trim() !== '') return toTitleCase(doctor.username)
+  return 'N/A'
+}
 
 // Auto-correct appointment date: if selected date is in the past, set it to tomorrow.
 const autoCorrectAppointment = () => {
@@ -147,8 +165,15 @@ const bookAppointment = async () => {
 
   try {
     state.value = states.PROCESSING
+    // Find the selected doctor's full name from the doctors list.
+    const selectedDoctor = doctors.value.find(doc => doc.id === form.doctorId)
+    const doctorFullName = selectedDoctor 
+      ? (selectedDoctor.fullName ? selectedDoctor.fullName : toTitleCase(selectedDoctor.username)) 
+      : 'N/A'
+
     const appointmentData = {
       doctorId: form.doctorId,
+      doctorName: doctorFullName, // Store the doctor's name directly.
       patientId: auth.currentUser ? auth.currentUser.uid : 'unknown',
       appointmentDate: form.appointmentDate,
       appointmentTime: form.appointmentTime,
@@ -264,6 +289,4 @@ button:disabled {
   margin-top: 1em;
   color: #555;
 }
-
-/* Ensure only the form (if needed) scrolls horizontally; otherwise, the layout auto-fits */
 </style>
