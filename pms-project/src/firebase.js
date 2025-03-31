@@ -1,17 +1,24 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+// ✅ Replace these with your actual Firebase config from Firebase Console
 const firebaseConfig = {
-    apiKey: "AIzaSyA5zxbYBVbPQBJLugdTyrJU27hRnizI24Q",
-    authDomain: "pms-automata.firebaseapp.com",
-    projectId: "pms-automata",
-    storageBucket: "pms-automata.firebasestorage.app",
-    messagingSenderId: "288638708542",
-    appId: "1:288638708542:web:5f2edf2d3577c989bc5a6f",
-    measurementId: "G-C9TZFCQ7ZL"
-  };
+  apiKey: "AIzaSyA7ns1QDm1wyqc1PO6taLhUf_f2IkLHLlc",
+  authDomain: "pms-automata-dev.firebaseapp.com",
+  projectId: "pms-automata-dev",
+  storageBucket: "pms-automata-dev.firebasestorage.app",
+  messagingSenderId: "520022139248",
+  appId: "1:520022139248:web:4db981818ce6a4d60aefb5",
+  measurementId: "G-SHQDGM8SBJ"
+};
 
+// ✅ Initialize Firebase App
 const app = initializeApp(firebaseConfig);
+
+// ✅ Initialize Services
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { db };
+// ✅ Export the initialized instances
+export { auth, db };
