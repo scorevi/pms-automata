@@ -1,13 +1,14 @@
-import DoctorDashboard from '@/views/Doctor/Dashboard.vue';
+// doctor_routes.js
+import Dashboard from '@/views/Doctor/Dashboard.vue';
+import ViewPatients from '@/views/Doctor/ViewPatients.vue';
 import AddPatient from '@/views/Doctor/AddPatient.vue';
 import ViewAppointments from '@/views/Doctor/ViewAppointments.vue';
-import ViewPatients from '@/views/Doctor/ViewPatients.vue';
 
 const doctor_routes = [
   {
     path: 'DoctorDashboard',
     name: 'DoctorDashboard',
-    component: DoctorDashboard,
+    component: Dashboard,
   },
   {
     path: 'ViewPatients',
@@ -16,7 +17,7 @@ const doctor_routes = [
   },
   {
     path: 'ViewAppointments',
-    name: 'ViewAppointments',
+    name: 'DoctorViewAppointments',
     component: ViewAppointments,
   },
   {

@@ -88,6 +88,7 @@ const login = async () => {
     Cookies.set("loggedIn", "true", { expires: 1/24 });
     Cookies.set("lastActivity", Date.now(), { expires: 1/24 });
     Cookies.set("userRole", userData.role, { expires: 1/24 });
+    Cookies.set("licenseNumber", userData.LicenseNo, { expires: 1/24 });
     
     // Redirect based on user's occupation (role)
     if (userData.role === "Doctor") {
@@ -150,9 +151,9 @@ const navigateRegister = () => {
             placeholder="Password"
             autocomplete="new-password"
           />
+          <!-- By having the button inside the form with type="submit", pressing Enter will trigger the form submission -->
+          <button type="submit">Login</button>
         </form>
-        <!-- Only one login button -->
-        <button @click="login">Login</button>
         <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
         <span @click="navigateRegister">Create an Account</span>
       </div>
@@ -160,7 +161,6 @@ const navigateRegister = () => {
     <div class="status-label">{{ statusMessage }}</div>
   </div>
 </template>
-
 
 <style scoped>
 .container {

@@ -14,10 +14,14 @@
         <router-link to="/DoctorView/AddPatient">
           <span class="material-symbols-outlined">person_add</span>Add Patient
         </router-link>
-        <!-- Replace router-link with an anchor that calls logout -->
+        <!-- Logout link -->
         <a href="#" @click.prevent="logout">
           <span class="material-symbols-outlined">logout</span>Log Out
         </a>
+        <!-- Doctor's license number label -->
+        <div v-if="doctorLicenseNumber">
+          <span>License No. {{ doctorLicenseNumber }}</span>
+        </div>
       </nav>
     </div>
     <div class="content-container">
@@ -32,6 +36,11 @@ import Cookies from "js-cookie";
 
 export default {
   name: "DoctorView",
+  computed: {
+    doctorLicenseNumber() {
+      return Cookies.get("licenseNumber");
+    },
+  },
   methods: {
     logout() {
       const auth = getAuth();
@@ -40,6 +49,7 @@ export default {
           Cookies.remove("loggedIn");
           Cookies.remove("lastActivity");
           Cookies.remove("userRole");
+          Cookies.remove("licenseNumber");
           this.$router.push("/");
         })
         .catch((error) => {
