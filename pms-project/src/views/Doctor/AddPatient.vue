@@ -282,6 +282,10 @@ form input {
   width: 300px;
 }
 
+label {
+    color: var(--primary-color);
+}
+
 .status-label {
   margin-top: 1em;
   font-size: 14px;

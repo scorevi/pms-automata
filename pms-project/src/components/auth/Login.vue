@@ -154,7 +154,7 @@ const navigateRegister = () => {
           <!-- By having the button inside the form with type="submit", pressing Enter will trigger the form submission -->
           <button type="submit">Login</button>
         </form>
-        <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+        <p v-if="errorMessage" style="color: red; margin-bottom: 1em; text-align: center;">{{ errorMessage }}</p>
         <span @click="navigateRegister">Create an Account</span>
       </div>
     </div>
@@ -172,6 +172,12 @@ const navigateRegister = () => {
   padding: 4em;
   box-sizing: border-box;
   background-color: #F0F5FA;
+}
+
+@media screen and (max-width: 430px) {
+  .container {
+    padding: 1em;
+  }
 }
 
 .login-container {
@@ -200,7 +206,7 @@ const navigateRegister = () => {
   display: flex;
   flex-direction: column;
   gap: 1em;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 button {
