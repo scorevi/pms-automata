@@ -10,7 +10,7 @@ const patient_routes = [
   },
   {
     path: 'ViewAppointments',
-    name: 'ViewAppointments',
+    name: 'patientViewAppointments',
     component: ViewAppointments,
   },
   {

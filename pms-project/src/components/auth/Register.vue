@@ -152,13 +152,13 @@ const navigateLogin = () => {
 };
 </script>
 
-
 <template>
   <div class="container flex-column">
     <div class="login-container flex-column">
       <div class="login-form flex-column">
         <h1>Register</h1>
-        <form class="flex-column">
+        <!-- Wrap your inputs in a form with @submit.prevent -->
+        <form class="flex-column" @submit.prevent="register">
           <input
             :value="form.username"
             @input="updateField('username', $event)"
@@ -216,8 +216,8 @@ const navigateLogin = () => {
             placeholder="Confirm Password"
             autocomplete="new-password"
           />
+          <button type="submit">Register</button>
         </form>
-        <button @click="register">Register</button>
         <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
         <span @click="navigateLogin">Already have an account?</span>
       </div>
