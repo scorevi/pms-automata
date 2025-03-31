@@ -7,18 +7,18 @@
         <h2>Upcoming Appointments</h2>
         <ul v-if="upcomingAppointments.length">
           <li v-for="appt in upcomingAppointments" :key="appt.id">
-            {{ formatDate(appt.appointmentDate) }} - {{ formatTime(appt.appointmentTime) }} : ({{ appt.reason || 'N/A' }})
+            {{ formatDate(appt.appointmentDate) }} - {{ formatTime(appt.appointmentTime) }} : ({{ appt.reason }})
           </li>
         </ul>
         <p v-else>No upcoming appointments.</p>
       </div>
       
-      <!-- Patient List -->
+      <!-- Patients List (displaying only the patient's name) -->
       <div class="panel patients-panel">
         <h2>Patients</h2>
         <ul v-if="patients.length">
           <li v-for="patient in patients" :key="patient.id">
-            {{ patient.name || 'Unknown' }} - {{ patient.contact || 'N/A' }}
+            {{ patient.name }}
           </li>
         </ul>
         <p v-else>No registered patients.</p>
@@ -39,22 +39,28 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db, auth } from "../../firebase";
+import { ref, onMounted, onUnmounted } from "vue";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { auth, db } from "../../firebase";
 
 export default {
   name: "DoctorDashboard",
   setup() {
-    // Reactive variables
+    // Reactive references
     const upcomingAppointments = ref([]);
     const patients = ref([]);
     const medicalRecords = ref([]);
+    
+    // To keep track of all unsubscribe functions for cleanup
+    const unsubscribeList = [];
 
-    // **FORMAT HELPERS**
+    // Format helpers for dates and times
     const formatDate = (date) => {
       if (!date) return "N/A";
-      const d = typeof date === "object" && date.seconds ? new Date(date.seconds * 1000) : new Date(date);
+      const d =
+        typeof date === "object" && date.seconds
+          ? new Date(date.seconds * 1000)
+          : new Date(date);
       return isNaN(d) ? "N/A" : d.toLocaleDateString();
     };
 
@@ -62,68 +68,91 @@ export default {
       if (!time) return "N/A";
       if (typeof time === "object" && time.seconds) {
         const t = new Date(time.seconds * 1000);
-        return t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+        return t.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
       }
       return time.match(/^\d{2}:\d{2}$/) ? time : "N/A";
     };
 
-    // **FETCH DATA**
-    const fetchDashboardData = async () => {
-      const user = auth.currentUser;
-      if (!user) return;
-
-      try {
-        // Fetch doctor's upcoming appointments
-        const apptQuery = query(collection(db, "appointments"), where("doctorId", "==", user.uid));
-        const apptSnapshot = await getDocs(apptQuery);
-
-        let fetchedAppointments = [];
-        apptSnapshot.forEach((docSnap) => {
-          const data = docSnap.data();
+    // Function to set up real-time listeners after user auth is confirmed
+    const setupListeners = (user) => {
+      // Upcoming Appointments Listener
+      const apptQuery = query(
+        collection(db, "appointments"),
+        where("doctorId", "==", user.uid)
+      );
+      const unsubscribeAppointments = onSnapshot(apptQuery, (snapshot) => {
+        const fetchedAppointments = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
           fetchedAppointments.push({
-            id: docSnap.id,
+            id: doc.id,
             appointmentDate: data.appointmentDate,
             appointmentTime: data.appointmentTime,
             reason: data.reason || "N/A",
           });
         });
         upcomingAppointments.value = fetchedAppointments;
+      });
+      unsubscribeList.push(unsubscribeAppointments);
 
-        // Fetch doctor's patients
-        const patientQuery = query(collection(db, "users"), where("doctorAssigned", "==", user.uid));
-        const patientSnapshot = await getDocs(patientQuery);
-
-        let fetchedPatients = [];
-        patientSnapshot.forEach((docSnap) => {
-          const data = docSnap.data();
+      // Patients Listener (fetching all patients and displaying only the name)
+      const patientQuery = query(collection(db, "users"));
+      const unsubscribePatients = onSnapshot(patientQuery, (snapshot) => {
+        const fetchedPatients = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
           fetchedPatients.push({
-            id: docSnap.id,
+            id: doc.id,
             name: data.username || "Unknown",
-            contact: data.contact || "N/A",
           });
         });
         patients.value = fetchedPatients;
+      });
+      unsubscribeList.push(unsubscribePatients);
 
-        // Fetch recent medical records
-        const recordsQuery = query(collection(db, "medicalRecords"), where("doctorId", "==", user.uid));
-        const recordsSnapshot = await getDocs(recordsQuery);
-
-        let fetchedRecords = [];
-        recordsSnapshot.forEach((docSnap) => {
-          const data = docSnap.data();
+      // Medical Records Listener
+      const recordsQuery = query(
+        collection(db, "medicalRecords"),
+        where("doctorId", "==", user.uid)
+      );
+      const unsubscribeRecords = onSnapshot(recordsQuery, (snapshot) => {
+        const fetchedRecords = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
           fetchedRecords.push({
-            id: docSnap.id,
+            id: doc.id,
             date: data.date || null,
             diagnosis: data.diagnosis || "No diagnosis",
           });
         });
         medicalRecords.value = fetchedRecords;
-      } catch (err) {
-        console.error("Error fetching doctor dashboard data:", err);
-      }
+      });
+      unsubscribeList.push(unsubscribeRecords);
     };
 
-    onMounted(fetchDashboardData);
+    // Listen for authentication state changes so that we only set up listeners when the user is ready
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setupListeners(user);
+      }
+    });
+
+    onMounted(() => {
+      // Additionally check if the user is already available and setup listeners if needed.
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        setupListeners(currentUser);
+      }
+    });
+
+    onUnmounted(() => {
+      unsubscribeList.forEach((unsub) => unsub());
+      if (unsubscribeAuth) unsubscribeAuth();
+    });
 
     return { upcomingAppointments, patients, medicalRecords, formatDate, formatTime };
   },
