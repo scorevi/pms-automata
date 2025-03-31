@@ -218,7 +218,7 @@ const navigateLogin = () => {
           />
           <button type="submit">Register</button>
         </form>
-        <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+        <p v-if="errorMessage" style="color: red; margin-bottom: 1em; text-align: center;">{{ errorMessage }}</p>
         <span @click="navigateLogin">Already have an account?</span>
       </div>
     </div>
@@ -236,6 +236,12 @@ const navigateLogin = () => {
   padding: 4em;
   box-sizing: border-box;
   background-color: #F0F5FA;
+}
+
+@media screen and (max-width: 430px) {
+  .container {
+    padding: 1em;
+  }
 }
 
 .login-container {
@@ -266,7 +272,7 @@ const navigateLogin = () => {
   display: flex;
   flex-direction: column;
   gap: 1em;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 button {
