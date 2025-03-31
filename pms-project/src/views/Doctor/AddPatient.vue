@@ -21,6 +21,7 @@ const state = ref(states.IDLE)
 const errorMessage = ref('')
 const successMessage = ref('')
 
+// Reactive form data for a new patient.
 const form = reactive({
   name: '',
   age: '',
@@ -38,7 +39,6 @@ const sanitizeNameForPassword = (name) => {
 }
 
 // Auto-correct function for numeric fields.
-// Note: The bloodPressure branch is commented out so it is not auto-corrected.
 const autoCorrect = (field) => {
   if (field === 'age') {
     let a = parseInt(form.age, 10)
@@ -86,15 +86,7 @@ const autoCorrect = (field) => {
       form.respiratoryRate = rr
     }
   }
-  /* // Removed auto-correction for bloodPressure so user input is preserved.
-  else if (field === 'bloodPressure') {
-    // Expecting format "systolic/diastolic mmHg"
-    const regex = /^\d{2,3}\/\d{2,3}\s?mmHg$/i
-    if (!regex.test(form.bloodPressure)) {
-      form.bloodPressure = '120/80 mmHg'
-    }
-  }
-  */
+  // Blood pressure auto-correction is disabled so that user input is preserved.
 }
 
 const addPatient = async () => {
@@ -102,6 +94,7 @@ const addPatient = async () => {
   successMessage.value = ''
   state.value = states.VALIDATING
 
+  // Validate that all fields are provided.
   if (
     !form.name ||
     !form.age ||
@@ -117,6 +110,7 @@ const addPatient = async () => {
     return
   }
 
+  // Enforce a minimum 10-character name.
   if (form.name.length < 10) {
     errorMessage.value = 'Patient name must be at least 10 characters long.'
     state.value = states.ERROR
@@ -151,6 +145,7 @@ const addPatient = async () => {
 
   // Generate password from sanitized name.
   const password = sanitizeNameForPassword(form.name)
+  // Generate fake email from name (remove spaces, lowercase).
   const fakeEmail = `${form.name.replace(/\s+/g, '').toLowerCase()}@example.com`
 
   try {
@@ -165,6 +160,13 @@ const addPatient = async () => {
       email: fakeEmail,
       role: "Patient",
       LicenseNo: "N/A",
+      age: form.age,
+      sex: form.sex,
+      bloodPressure: form.bloodPressure,
+      heartRate: form.heartRate,
+      temperature: form.temperature,
+      oxygenSaturation: form.oxygenSaturation,
+      respiratoryRate: form.respiratoryRate,
       createdAt: new Date()
     })
 
@@ -252,12 +254,12 @@ const onFocus = () => {
         <label for="respiratoryRate">Respiratory Rate (breaths/min):</label>
         <input id="respiratoryRate" type="number" v-model="form.respiratoryRate" @focus="onFocus" @blur="autoCorrect('respiratoryRate')" placeholder="Respiratory Rate (breaths/min)" min="10" max="30" required />
       </div>
-      <button type="submit" :disabled="state.value === states.REGISTERING || state.value === states.VALIDATING">
+      <button type="submit" :disabled="state === states.REGISTERING || state === states.VALIDATING">
         Add
       </button>
     </form>
-    <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
-    <p v-if="successMessage" style="color: green;">{{ successMessage }}</p>
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
     <div class="status-label">{{ statusMessage }}</div>
   </div>
 </template>
@@ -267,24 +269,61 @@ const onFocus = () => {
   display: flex;
   align-items: center;
   gap: 1em;
+  margin-bottom: 0.5em;
 }
 
 .form-group label {
   width: 150px;
   text-align: right;
+  font-weight: bold;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 
 form {
   gap: 1em;
 }
 
-form input {
+form input,
+form select {
   width: 300px;
+  padding: 0.5em;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 0.75em;
+  font-size: 1em;
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  text-align: center;
+  color: red;
+}
+
+.success-message {
+  text-align: center;
+  color: green;
 }
 
 .status-label {
+  text-align: center;
+  font-style: italic;
   margin-top: 1em;
-  font-size: 14px;
-  color: #333;
+  color: #555;
 }
 </style>
