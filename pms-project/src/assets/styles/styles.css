@@ -29,6 +29,7 @@
 }
 
 .content-container {
+    height: auto;
     padding: 50px;
 }
 
