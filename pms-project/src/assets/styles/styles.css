@@ -29,6 +29,10 @@
 }
 
 .content-container {
+<<<<<<< HEAD
+=======
+    height: auto;
+>>>>>>> 593a26af846eb077916757690f38c9d6d5bbac7c
     padding: 50px;
 }
 
