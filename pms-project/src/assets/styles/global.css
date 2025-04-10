@@ -1,15 +1,39 @@
 :root {
-    --primary-color: #7082EC;
-    --primary-color-hover: #4860ec;
-    --secondary-color: #7082EC20;
+    --primary-color: #6A0DAD;
+    --primary-color-hover: #4B0082;
+    --secondary-color: rgba(106, 13, 173, 0.1);
+    --background-color: #FFFFFF;
+    --surface-color: #F8F9FA;
+    --text-color: #333333;
+    --text-muted-color: #6c757d;
+    --border-color: #DEE2E6;
+
     --font-size-base: 16px;
     --spacing-base: 8px;
+
+    --border-radius-small: 0.25rem;
+    --border-radius-medium: 0.5rem;
+    --border-radius-large: 0.75rem;
 }
 
-body, h1, h2, h3, p, ul, ol {
-    margin: 0px;
-    padding: 0px;
-    font-family:'Inter', Arial, sans-serif;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: var(--font-size-base);
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
+}
+
+h1, h2, h3, p, ul, ol {
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    margin-bottom: calc(var(--spacing-base) * 2);
+    font-weight: 600;
 }
 
 @font-face {
@@ -22,28 +46,75 @@ body, h1, h2, h3, p, ul, ol {
 
 button {
     all: unset;
+    box-sizing: border-box;
+    display: inline-block;
     background-color: var(--primary-color);
-    font-style: bold;
     color: #FFFFFF;
-    padding: 1em 2em;
-    border: none;
-    border-radius: 1em;
+    font-weight: 500;
+    padding: calc(var(--spacing-base) * 1.25) calc(var(--spacing-base) * 2.5);
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius-medium);
     text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
-button:hover {
+
+button:hover, button:focus {
     background-color: var(--primary-color-hover);
+    border-color: var(--primary-color-hover);
+    outline: none;
 }
 
-input, select, option {
+button.secondary {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+button.secondary:hover, button.secondary:focus {
+    background-color: var(--secondary-color);
+    border-color: var(--primary-color);
+}
+
+
+input, select, textarea {
     all: unset;
-    background-color: #F6F8FA;
-    color: #56555D;
-    padding: 1em 2em;
-    border: none;
-    border-radius: 1em;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    background-color: #FFFFFF;
+    color: var(--text-color);
+    padding: calc(var(--spacing-base) * 1.25) calc(var(--spacing-base) * 1.5);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-medium);
+    line-height: 1.5;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--secondary-color);
+}
 
+input, select, textarea, button {
+    margin-bottom: calc(var(--spacing-base) * 1.5);
+}
 
+.form-group > *:last-child {
+    margin-bottom: 0;
+}
 
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right calc(var(--spacing-base) * 1.5) center;
+    background-size: 16px 12px;
+    padding-right: calc(var(--spacing-base) * 4);
+}
 
+option {
+     all: unset;
+     padding: 5px 10px;
+}

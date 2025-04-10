@@ -2,40 +2,81 @@
     width: 100vw;
     height: 100vh;
     box-sizing: border-box;
-  }
+    display: flex;
+    background-color: var(--background-color);
+}
+
 .side-bar-container {
     box-sizing: border-box;
+    flex: 0 0 250px;
     height: 100%;
-    border-right: 1px solid #A0A7AF;
-    padding: 1em;
+    border-right: 1px solid var(--border-color);
+    padding: calc(var(--spacing-base) * 2);
+    background-color: var(--surface-color);
 }
+
 .nav {
-    gap: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-base) * 0.75);
     height: 100%;
 }
+
 .nav a {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1em;
+    gap: calc(var(--spacing-base) * 1.25);
     text-decoration: none;
-    color: #A0A7AF;
-    padding: 1em 2em;
-    border-radius: 1em;
+    color: var(--text-muted-color);
+    padding: calc(var(--spacing-base) * 1.25) calc(var(--spacing-base) * 2);
+    border-radius: var(--border-radius-medium);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    font-weight: 500;
 }
-.user-view-container .router-link-active {
+
+.nav a:hover {
     background-color: var(--secondary-color);
-    color: var(--primary-color) !important;
+    color: var(--primary-color);
+}
+
+.user-view-container .router-link-active {
+    background-color: var(--primary-color);
+    color: #FFFFFF !important;
+}
+
+.user-view-container .router-link-active svg {
+   fill: #FFFFFF;
+   stroke: #FFFFFF;
 }
 
 .content-container {
-<<<<<<< HEAD
-=======
-    height: auto;
->>>>>>> 593a26af846eb077916757690f38c9d6d5bbac7c
-    padding: 50px;
+    flex: 1;
+    padding: calc(var(--spacing-base) * 4);
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .content-container h1 {
-    margin-bottom: 50px;
+    margin-bottom: calc(var(--spacing-base) * 4);
+    color: var(--primary-color);
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-large);
+    padding: calc(var(--spacing-base) * 3);
+    margin-bottom: calc(var(--spacing-base) * 3);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card-header {
+    margin-bottom: calc(var(--spacing-base) * 2);
+    padding-bottom: calc(var(--spacing-base) * 1.5);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.1rem;
+    font-weight: 600;
 }
