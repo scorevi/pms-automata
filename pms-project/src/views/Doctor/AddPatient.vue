@@ -17,6 +17,9 @@ const states = {
   SUCCESS: 'success'
 }
 
+// Define the urgency levels for the dropdown
+const urgencyLevels = ['Emergency', 'Urgent', 'Non Urgent'];
+
 const state = ref(states.IDLE)
 const errorMessage = ref('')
 const successMessage = ref('')
@@ -30,7 +33,8 @@ const form = reactive({
   heartRate: '',
   temperature: '',
   oxygenSaturation: '',
-  respiratoryRate: ''
+  respiratoryRate: '',
+  urgency: '' // Added urgency field, initialized to empty for placeholder
 })
 
 // Helper: Sanitize the name for password (remove spaces and non-alphanumerics, lowercase)
@@ -94,7 +98,7 @@ const addPatient = async () => {
   successMessage.value = ''
   state.value = states.VALIDATING
 
-  // Validate that all fields are provided.
+  // Validate that all fields are provided, including urgency.
   if (
     !form.name ||
     !form.age ||
@@ -103,7 +107,8 @@ const addPatient = async () => {
     !form.heartRate ||
     !form.temperature ||
     !form.oxygenSaturation ||
-    !form.respiratoryRate
+    !form.respiratoryRate ||
+    !form.urgency // Added urgency check
   ) {
     errorMessage.value = 'All fields are required.'
     state.value = states.ERROR
@@ -155,6 +160,7 @@ const addPatient = async () => {
 
     await updateProfile(user, { displayName: form.name })
 
+    // Add patient data to Firestore, including urgency
     await setDoc(doc(db, "users", user.uid), {
       username: form.name,
       email: fakeEmail,
@@ -167,6 +173,7 @@ const addPatient = async () => {
       temperature: form.temperature,
       oxygenSaturation: form.oxygenSaturation,
       respiratoryRate: form.respiratoryRate,
+      urgency: form.urgency, // Save urgency level
       createdAt: new Date()
     })
 
@@ -182,6 +189,7 @@ const addPatient = async () => {
     form.temperature = ''
     form.oxygenSaturation = ''
     form.respiratoryRate = ''
+    form.urgency = '' // Clear urgency field
   } catch (error) {
     errorMessage.value = error.message
     state.value = states.ERROR
@@ -235,6 +243,15 @@ const onFocus = () => {
         </select>
       </div>
       <div class="form-group">
+          <label for="urgency">Urgency:</label>
+          <select id="urgency" v-model="form.urgency" @focus="onFocus" required>
+            <option value="" disabled>Select Urgency</option>
+            <option v-for="level in urgencyLevels" :key="level" :value="level">
+              {{ level }}
+            </option>
+          </select>
+        </div>
+      <div class="form-group">
         <label for="bloodPressure">Blood Pressure:</label>
         <input id="bloodPressure" type="text" v-model="form.bloodPressure" @focus="onFocus" placeholder="Blood Pressure (e.g. 120/80 mmHg)" required />
       </div>
@@ -273,36 +290,48 @@ const onFocus = () => {
 }
 
 .form-group label {
-  width: 150px;
+  width: 150px; /* Adjusted width to fit potentially longer labels like "Respiratory Rate" */
   text-align: right;
   font-weight: bold;
+  flex-shrink: 0; /* Prevent label from shrinking */
 }
 
 .flex-column {
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  gap: 1em; /* Consistent gap for the overall form */
 }
 
 form {
-  gap: 1em;
+  /* Remove gap here if .flex-column already provides it */
+  /* gap: 1em; */
+  max-width: 500px; /* Optional: constrain form width */
+  margin: auto; /* Optional: center the form */
 }
 
 form input,
 form select {
-  width: 300px;
+  /* width: 300px; */ /* Let flexbox handle width */
+  flex-grow: 1; /* Allow input/select to take available space */
   padding: 0.5em;
   box-sizing: border-box;
+  /* Ensure consistent styling with global styles if available */
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: var(--border-radius-medium, 4px);
+  background-color: var(--surface-color, #fff);
 }
 
+/* Apply consistent styling from global.css if needed */
 button {
   padding: 0.75em;
   font-size: 1em;
   background-color: var(--primary-color, #007bff);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius-medium, 4px);
   cursor: pointer;
+  align-self: center; /* Center button within the flex column */
+  min-width: 150px; /* Give button a decent minimum width */
 }
 
 button:disabled {
@@ -313,15 +342,17 @@ button:disabled {
 .error-message {
   text-align: center;
   color: red;
+  margin-top: 1em;
 }
 
 .success-message {
   text-align: center;
   color: green;
+  margin-top: 1em;
 }
 
 label {
-    color: var(--primary-color);
+    color: var(--primary-color, #007bff); /* Use CSS variable or fallback */
 }
 
 .status-label {
