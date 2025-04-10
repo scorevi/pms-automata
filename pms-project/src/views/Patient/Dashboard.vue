@@ -197,18 +197,10 @@ export default {
   max-width: 100%;
   padding: 1em;
   box-sizing: border-box;
-<<<<<<< HEAD
-  background-color: #f8f9fa;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-=======
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 1em;
-  justify-content: flex-start;
->>>>>>> 593a26af846eb077916757690f38c9d6d5bbac7c
 }
 
 .colored-text {
