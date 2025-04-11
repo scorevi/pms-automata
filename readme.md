@@ -5,4 +5,4 @@ Developed by:
 	Sean Patrick Caintic
 	Kirk Patrick Besa
 	Zari Datuin
-	Jupiter Lagmay
+	Jethro Lagmay
